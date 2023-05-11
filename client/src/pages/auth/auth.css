@@ -1,0 +1,37 @@
+.auth {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  height: 100vh;
+}
+
+.authLeft {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.authLogo {
+  width: 4rem;
+}
+
+.authTitle {
+  margin: 0;
+  font-size: 3rem;
+  background-color: red;
+  background-image: var(--buttonBg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.authSubtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  text-align: end;
+}

@@ -1,0 +1,47 @@
+.profileModalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: var(--cardColor);
+}
+
+.profileModalInput {
+  flex: 1;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background-color: var(--inputColor);
+}
+
+.profileModalBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 2rem;
+  width: 100%;
+}
+
+.btn--profileModalForm {
+  width: 6rem;
+  height: 2rem;
+  align-self: flex-end;
+}
+
+.profileModalText {
+  font-size: 12px;
+}
+
+.profileModalFormAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 2rem;
+  width: 100%;
+}

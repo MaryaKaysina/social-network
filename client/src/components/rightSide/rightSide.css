@@ -1,0 +1,23 @@
+.rightSide {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.rightSideNav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.navIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+}
+
+.btn--rightSide {
+  width: 80%;
+  height: 3rem;
+  align-self: center;
+}
