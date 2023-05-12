@@ -3,12 +3,14 @@ import UserModel from "../Models/userModel.js";
 import { getDataUser } from '../utils/getDataUser.js';
 
 export const registerUser = async (req, res) => {
-  const { username, password, firstname, lastname } = req.body;
   const salt = await bcrypt.genSalt(10);
-  const hashedPass = await bcrypt.hash(password, salt);
-  
+  req.body.password = await bcrypt.hash(req.body.password, salt);
+  const { username } = req.body;
   try {
-    const newUser = new UserModel(username, hashedPass, firstname, lastname);
+    const oldUser = await UserModel.findByField('username', '==', username);
+    if (oldUser) return res.status(400).json('User is already exists');
+
+    const newUser = new UserModel(...req.body);
     const user = await UserModel.create(newUser);
     res.status(200).json(getDataUser(user));
   } catch (error) {
