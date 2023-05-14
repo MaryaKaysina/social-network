@@ -1,4 +1,7 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { uploadImage, uploadPost } from '@core/state/actions/UploadActions';
 
 import ProfileImg from '@core/img/profileImg.jpg';
 import { 
@@ -22,21 +25,70 @@ const imagesType = [
 
 const PostShare = () => {
   const [image, setImage] = React.useState(null);
+  const [formError, setFormError] = React.useState(false);
   const imageRef = React.useRef(null);
+  const descRef = React.useRef(null);
+
+  const user = useSelector((state) => state.authReducer.authData.userData);
+  const loading = useSelector((state) => state.postReducer.uploading);
+  const dispatch = useDispatch();
+
+  const handleImageClose = () => {
+    setImage(null);
+    imageRef.current.value = null;
+  };
+
+  const resetForm = () => {
+    handleImageClose();
+    descRef.current.value = null;
+  }
 
   const handleImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       const img = event.target.files[0];
-      console.log(event.target.files[0]);
-      setImage({ image: URL.createObjectURL(img) });
+      setImage(img);
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(!descRef.current.value) return setFormError(true);
+
+    const newPost = {
+      userId: user._id,
+      desc: descRef.current.value
+    }
+
+    if(image) {
+      const data = new FormData();
+      const fileName = Date.now() + image.name;
+      data.append('name', fileName);
+      data.append('file', image, image.name);
+      newPost.image = fileName;
+
+      try {
+        dispatch(uploadImage(data));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    dispatch(uploadPost(newPost));
+    resetForm();
+  }
+
   return (
-    <div className='postShare'>
+    <form className='postShare' encType="multipart/form-data">
       <img src={ProfileImg} alt="" className="postShareAvatar" />
       <div className="postShareInput">
-        <input className="postShareText" type="text" placeholder="What's happening" />
+        <input 
+          className={formError 
+            ? "postShareText postShareText--error" 
+            : "postShareText"} 
+          type="text" 
+          placeholder="What's happening" 
+          required
+          ref={descRef}
+        />
         <div className="postShareOptions">
           <div 
             className="postShareOption postShareOption--photo"
@@ -57,7 +109,13 @@ const PostShare = () => {
             <UilSchedule/>
             Shedule
           </div>
-          <button className="btn postShareBtn">Share</button>
+          <button 
+            className="btn postShareBtn" 
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? 'Uploading...' : 'Share'}
+          </button>
           <input 
             className='hidden' 
             type="file" 
@@ -72,13 +130,13 @@ const PostShare = () => {
           <div className="previewImageBlock">
             <UilTimes 
               className="previewImageClose" 
-              onClick={() => setImage(null)}
+              onClick={handleImageClose}
             />
-            <img className="previewImage" src={image.image} alt=""/>
+            <img className="previewImage" src={URL.createObjectURL(image)} alt=""/>
           </div>
         )}
       </div>
-    </div>
+    </form>
   )
 }
 

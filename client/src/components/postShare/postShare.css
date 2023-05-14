@@ -22,11 +22,16 @@
 
 .postShareText {
   padding: 10px;
-  border: none;
+  border: 1px solid var(--inputColor);
   border-radius: 10px;
   background-color: var(--inputColor);
   font-size: 17px;
   outline: none;
+  transition: all .3s ease-in-out;
+}
+
+.postShareText--error {
+  border: 1px solid var(--location);
 }
 
 .postShareOptions {

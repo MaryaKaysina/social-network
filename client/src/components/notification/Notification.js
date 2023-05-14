@@ -6,7 +6,7 @@ const NotificationCustom = ({ isError, message, onClose, isOpen }) => {
   return (
     <Notification 
       icon={isError ? <UilTimes size="2rem" /> : <UilCheck size="2rem" />} 
-      color="red" 
+      color={isError ? "red" : "green"}
       onClose={onClose}
       styles={(theme) => ({
         root: {

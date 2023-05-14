@@ -1,14 +1,14 @@
 import Model from "./model.js";
 
 class PostModel extends Model('posts') {
-  constructor(
+  constructor({
     userId,
     desc = '',
     likes = [],
     image = '',
     createdAt = Date.now(),
     updatedAt = Date.now()
-  ) {
+  }) {
     super();
     
     if (!userId) throw new Error('Field userId is required!');

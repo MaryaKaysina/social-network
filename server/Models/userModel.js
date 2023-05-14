@@ -1,7 +1,7 @@
 import Model from "./model.js";
 
 class UserModel extends Model('users') {
-  constructor(
+  constructor({
     username,
     password,
     firstname,
@@ -15,7 +15,7 @@ class UserModel extends Model('users') {
     relationship = '',
     followers = [],
     following = []
-  ) {
+  }) {
     super();
     
     if (!username) throw new Error('Field username is required!');

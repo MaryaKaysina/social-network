@@ -2,9 +2,8 @@ import PostModel from '../Models/postModel.js';
 import UserModel from "../Models/userModel.js";
 
 export const createPost = async (req, res) => {
-  const { userId, desc, image } = req.body;
   try {
-    const newPost = new PostModel(userId, desc, image);
+    const newPost = new PostModel({...req.body});
     const post = await PostModel.create(newPost);
     res.status(200).json(post);
   } catch (error) {

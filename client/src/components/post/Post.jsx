@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Comment from '@core/img/comment.png';
 import Share from '@core/img/share.png';
@@ -8,9 +9,17 @@ import NotLike from '@core/img/notlike.png';
 import "./post.css";
 
 const Post = ({ post }) => {
+  const user = useSelector((state) => state.authReducer.authData.userData);
+
   return (
     <div className='post'>
-      <img className="postImg" src={post.img} alt="Картинка поста" />
+      <img 
+        className="postImg" 
+        src={post.image 
+          ? process.env.REACT_APP_PUBLIC_FOLDER + post.image 
+          : ''} 
+        alt="Картинка поста" 
+      />
       <div className="postReact">
         <img src={post.liked ? Like : NotLike} alt="" />
         <img src={Comment} alt="" />
