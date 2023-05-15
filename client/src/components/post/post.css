@@ -20,6 +20,10 @@
   gap: 1.5rem;
 }
 
+.postReactIcon {
+  cursor: pointer;
+}
+
 .postNumberLikes {
   font-size: 12px;
   color: var(--gray);

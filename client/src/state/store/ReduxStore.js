@@ -5,11 +5,12 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import { reducers } from "@core/state/reducers";
+import { LOCAL_BASE_KEY } from '@core/const';
 
 function saveToLocalStorage(store) {
   try {
       const serializedStore = JSON.stringify(store);
-      window.localStorage.setItem('store', serializedStore);
+      window.localStorage.setItem(LOCAL_BASE_KEY, serializedStore);
   } catch(e) {
       console.log(e);
   }
@@ -17,7 +18,7 @@ function saveToLocalStorage(store) {
 
 function loadFromLocalStorage() {
   try {
-      const serializedStore = window.localStorage.getItem('store');
+      const serializedStore = window.localStorage.getItem(LOCAL_BASE_KEY);
       if(serializedStore === null) return undefined;
       return JSON.parse(serializedStore);
   } catch(e) {

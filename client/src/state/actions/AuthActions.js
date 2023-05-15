@@ -2,7 +2,8 @@ import * as AuthApi from '@core/api/AuthRequests';
 import { 
   AUTH_START, 
   AUTH_SUCCESS, 
-  AUTH_FAIL 
+  AUTH_FAIL,
+  LOG_OUT
 } from '@core/state/actions/actionTypes';
 import { ERR_SERVER } from '@core/const';
 
@@ -26,4 +27,8 @@ export const signUp = (formData) => async(dispatch) => {
   } catch (error) {
     dispatch({ type: AUTH_FAIL, error: error.response?.data.message || ERR_SERVER });
   }
+}
+
+export const logOut = () => async(dispatch) => {
+  dispatch({ type: LOG_OUT });
 }

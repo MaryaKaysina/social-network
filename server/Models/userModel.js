@@ -10,6 +10,7 @@ class UserModel extends Model('users') {
     profilePicture = '',
     coverPicture = '',
     about = '',
+    country = '',
     livesIn = '',
     worksAt = '',
     relationship = '',

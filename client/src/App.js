@@ -33,13 +33,29 @@ function App() {
 
   return (
     <div className="App">
-        <div className="blur blur--top"></div>
-        <div className="blur blur--bottom"></div>
+      <div className="blur blur--top"></div>
+      <div className="blur blur--bottom"></div>
         {/* <Profile /> */}
-        <Routes>
-        <Route path="/" element={user ? <Navigate to="home" /> : <Navigate to="auth" />} />
-        <Route path="/home" element={user ? <Home /> : <Navigate to="../auth" />} />
-        <Route path="/auth" element={user ? <Navigate to="../home" /> : <Auth isSignUp={isSignUp} setIsSignUp={setIsSignUp} />} />
+      <Routes>
+        <Route 
+          path="/" 
+          element={user ? <Navigate to="home" /> : <Navigate to="auth" />} 
+        />
+        <Route 
+          path="/home" 
+          element={user ? <Home /> : <Navigate to="../auth" />} 
+        />
+        <Route 
+          path="/auth" 
+          element={user 
+            ? <Navigate to="../home" /> 
+            : <Auth isSignUp={isSignUp} setIsSignUp={setIsSignUp} />
+          } 
+        />
+        <Route 
+          path="/profile/:id" 
+          element={user ? <Profile />: <Navigate to="../auth" />} 
+        />
       </Routes>
       <NotificationCustom 
         isError={true}

@@ -24,6 +24,8 @@
   position: absolute;
   bottom: -3rem;
   width: 6rem;
+  height: 6rem;
+  object-fit: cover;
   border-radius: 50%;
   box-shadow: var(--profileShadow);
 }
@@ -84,10 +86,27 @@
 }
 
 .profileBtn {
+  position: relative;
+  margin: 0 auto;
   margin-bottom: 1.75rem;
-  border: none;
-  background: transparent;
   font-weight: bold;
   color: var(--orange);
-  cursor: pointer;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.profileBtn::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--orange);
+  width: 100%;
+  height: 1px;
+  transform: scale(0);
+  transition: transform .3s ease-in-out;
+}
+
+.profileBtn:hover::after {
+  transform: scale(1);
 }

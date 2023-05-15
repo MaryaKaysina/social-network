@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { uploadImage, uploadPost } from '@core/state/actions/UploadActions';
 
-import ProfileImg from '@core/img/profileImg.jpg';
 import { 
   UilScenery, 
   UilPlayCircle, 
@@ -29,8 +28,10 @@ const PostShare = () => {
   const imageRef = React.useRef(null);
   const descRef = React.useRef(null);
 
+  const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
+
   const user = useSelector((state) => state.authReducer.authData.userData);
-  const loading = useSelector((state) => state.postReducer.uploading);
+  const uploading = useSelector((state) => state.postReducer.uploading);
   const dispatch = useDispatch();
 
   const handleImageClose = () => {
@@ -51,6 +52,7 @@ const PostShare = () => {
   };
 
   const handleSubmit = (e) => {
+    console.log('handleSubmit');
     e.preventDefault();
     if(!descRef.current.value) return setFormError(true);
 
@@ -78,7 +80,13 @@ const PostShare = () => {
 
   return (
     <form className='postShare' encType="multipart/form-data">
-      <img src={ProfileImg} alt="" className="postShareAvatar" />
+      <img 
+        src={user.profilePicture 
+          ? serverPublic + user.profilePicture 
+          : serverPublic + 'defaultProfile.png'}  
+        alt="" 
+        className="postShareAvatar" 
+      />
       <div className="postShareInput">
         <input 
           className={formError 
@@ -112,9 +120,9 @@ const PostShare = () => {
           <button 
             className="btn postShareBtn" 
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={uploading}
           >
-            {loading ? 'Uploading...' : 'Share'}
+            {uploading ? 'Uploading...' : 'Share'}
           </button>
           <input 
             className='hidden' 

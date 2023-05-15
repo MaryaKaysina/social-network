@@ -8,25 +8,25 @@ import "./posts.css";
 const Posts = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer.authData.userData);
-  const { posts, uploading } = useSelector((state) => state.postReducer);
+  const { posts, loading } = useSelector((state) => state.postReducer);
 
   React.useEffect(() => {
     dispatch(getTimelinePosts(user._id));
-  }, [user._id]);
+  }, []);
 
   return (
     <div className='posts'>
-      {!uploading && posts.length === 0 && (
-        <p className="postsNotFound">
-          There are no messages yet. Please share your thoughts with your friends
-        </p>
-      )}
-      {uploading && (
+      {loading && (
         <p className="postsNotFound">
           Fetching posts...
         </p>
       )}
-      {!uploading && posts.length > 0 && (
+      {!loading && posts.length === 0 && (
+        <p className="postsNotFound">
+          There are no messages yet. Please share your thoughts with your friends
+        </p>
+      )}
+      {!loading && posts.length > 0 && (
         posts.map((post) => (
           <Post key={post._id} post={post} />
         ))

@@ -1,8 +1,9 @@
-import { LOCAL_KEY } from '@core/const';
+import { LOCAL_KEY, LOCAL_BASE_KEY } from '@core/const';
 import { 
   AUTH_START, 
   AUTH_SUCCESS, 
-  AUTH_FAIL 
+  AUTH_FAIL,
+  LOG_OUT 
 } from '@core/state/actions/actionTypes';
 
 const initialState = {
@@ -40,6 +41,9 @@ const authReducer = (state = initialState, action) => {
         error: true,
         errMessage: action.error
       };
+    case LOG_OUT:
+      localStorage.removeItem(LOCAL_KEY);
+      return { ...state, ...initialState };
     default:
       return state;
   }

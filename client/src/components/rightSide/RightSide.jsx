@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import TrendCard from '@components/trendCard/TrendCard';
 import ShareModal from '@components/shareModal/ShareModal';
 
@@ -15,7 +16,9 @@ const RightSide = () => {
   return (
     <div className='rightSide'>
       <div className="rightSideNav">
-        <img className="navIcon" src={Home} alt="" />
+        <Link to={`/home`}>
+          <img className="navIcon" src={Home} alt="" />
+        </Link>
         <UilSetting className="navIcon" />
         <img className="navIcon" src={Notification} alt="" />
         <img className="navIcon" src={Comment} alt="" />
