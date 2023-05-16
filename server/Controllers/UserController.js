@@ -1,6 +1,19 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import UserModel from "../Models/userModel.js";
 import { getDataUser } from '../utils/getDataUser.js';
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.getAll();
+    if(!users) return res.status(404).json('User does not exists');
+
+    const usersData = users.map((user) => getDataUser(user));
+    res.status(200).json(usersData);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 export const getUser = async (req, res) => {
   const id = req.params.id;
@@ -16,9 +29,9 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
-  const { currentUserId, currentUserAdminStatus, password } = req.body;
+  const { _id, isAdmin, password } = req.body;
 
-  if (id !== currentUserId && !currentUserAdminStatus) {
+  if (id !== _id && !isAdmin) {
     return res
       .status(403)
       .json('Permission denied. You can only update your own profile');
@@ -30,7 +43,15 @@ export const updateUser = async (req, res) => {
       req.body.password = await bcrypt.hash(password, salt);
     }
     const user = await UserModel.findByIdAndUpdate(id, req.body);
-    res.status(200).json(getDataUser(user));
+
+    const token = jwt.sign(
+      { username: user.username, id: user._id }, 
+      process.env.JWT_KEY, 
+      { expiresIn: '1h' }
+    );
+
+    const userData = getDataUser(user);
+    res.status(200).json({ userData, token });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -56,9 +77,9 @@ export const deleteUser = async (req, res) => {
 
 export const followUser = async (req, res) => {
   const id = req.params.id;
-  const { currentUserId } = req.body;
+  const { _id } = req.body;
 
-  if (id === currentUserId) {
+  if (id === _id) {
     return res.status(403).json('Action forbidden');
   }
 
@@ -66,14 +87,14 @@ export const followUser = async (req, res) => {
     const followUser = await UserModel.findById(id);
     if(!followUser) return res.status(404).json('User does not exists');
 
-    const followingUser = await UserModel.findById(currentUserId);
+    const followingUser = await UserModel.findById(_id);
     if(!followingUser) return res.status(404).json('User does not exists');
 
-    if(followUser.followers.includes(currentUserId)) {
+    if(followUser.followers.includes(_id)) {
       return res.status(403).json('User is already followed by you');
     }
 
-    followUser.followers.push(currentUserId);
+    followUser.followers.push(_id);
     const followUserData = {
       followers: followUser.followers,
       updatedAt: Date.now().toString()
@@ -85,7 +106,7 @@ export const followUser = async (req, res) => {
       following: followingUser.following,
       updatedAt: Date.now().toString()
     };
-    await UserModel.findByIdAndUpdate(currentUserId, followingUserData);
+    await UserModel.findByIdAndUpdate(_id, followingUserData);
 
     res.status(200).json('User followed');
   } catch (error) {
@@ -95,9 +116,9 @@ export const followUser = async (req, res) => {
 
 export const unFollowUser = async (req, res) => {
   const id = req.params.id;
-  const { currentUserId } = req.body;
+  const { _id } = req.body;
 
-  if (id === currentUserId) {
+  if (id === _id) {
     return res.status(403).json('Action forbidden');
   }
 
@@ -105,15 +126,15 @@ export const unFollowUser = async (req, res) => {
     const followUser = await UserModel.findById(id);
     if(!followUser) return res.status(404).json('User does not exists');
 
-    const followingUser = await UserModel.findById(currentUserId);
+    const followingUser = await UserModel.findById(_id);
     if(!followingUser) return res.status(404).json('User does not exists');
 
-    if(!followUser.followers.includes(currentUserId)) {
+    if(!followUser.followers.includes(_id)) {
       return res.status(403).json('User is not followed by you');
     }
 
     followUser.followers = followUser.followers
-      .filter((folId) => folId !== currentUserId);
+      .filter((folId) => folId !== _id);
     const followUserData = {
       followers: followUser.followers,
       updatedAt: Date.now().toString()
@@ -126,7 +147,7 @@ export const unFollowUser = async (req, res) => {
       following: followingUser.following,
       updatedAt: Date.now().toString()
     };
-    await UserModel.findByIdAndUpdate(currentUserId, followingUserData);
+    await UserModel.findByIdAndUpdate(_id, followingUserData);
 
     res.status(200).json('User unfollowed');
   } catch (error) {

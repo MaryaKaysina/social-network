@@ -1,0 +1,34 @@
+.user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.userImg {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.userName {
+  font-weight: bold;
+}
+
+.userBtn {
+  padding: 0 20px;
+  height: 2rem;
+}
+

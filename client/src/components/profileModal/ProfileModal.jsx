@@ -1,9 +1,12 @@
 import React from 'react';
 import { Modal, useMantineTheme } from '@mantine/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { UilScenery } from '@iconscout/react-unicons';
+
+import { uploadImage } from '@core/state/actions/UploadActions';
+import { updateUser } from '@core/state/actions/UserActions';
 
 import "./profileModal.css";
 
@@ -26,24 +29,18 @@ const ProfileModal = ({ isOpen, setIsOpen, data }) => {
 
   const dispatch = useDispatch();
   const params = useParams();
-  const user = useSelector((state) => state.authReducer.authData.userData);
 
   const theme = useMantineTheme();
   const themeColor = theme.colorScheme === 'dark' 
     ? theme.colors.dark[9] 
     : theme.colors.gray[2];
 
-  const handleProfileImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const img = event.target.files[0];
-      setProfileImage(img);
-    }
-  };
-
-  const handleCoverImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const img = event.target.files[0];
-      setCoverImage(img);
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const img = e.target.files[0];
+      e.target.name === 'profilePicture' 
+        ? setProfileImage(img)
+        : setCoverImage(img);
     }
   };
 
@@ -51,6 +48,42 @@ const ProfileModal = ({ isOpen, setIsOpen, data }) => {
     const name = e.target.name;
     const value = e.target.value;
     setFormData({ ...formData, [name] : value })
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userData = formData;
+
+    if (profileImage) {
+      const data = new FormData();
+      const fileName = Date.now() + profileImage.name;
+      data.append('name', fileName);
+      data.append('file', profileImage, profileImage.name);
+      userData.profilePicture = fileName;
+
+      try {
+        dispatch(uploadImage(data));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (coverImage) {
+      const data = new FormData();
+      const fileName = Date.now() + coverImage.name;
+      data.append('name', fileName);
+      data.append('file', coverImage, coverImage.name);
+      userData.coverPicture = fileName;
+
+      try {
+        dispatch(uploadImage(data));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    dispatch(updateUser(params.id, userData));
+    setIsOpen(false);
   };
 
   return (
@@ -123,6 +156,16 @@ const ProfileModal = ({ isOpen, setIsOpen, data }) => {
             />
           </div>
           <div className="profileModalBlock">
+            <input 
+              className="profileModalInput" 
+              type="text" 
+              placeholder='About' 
+              name='about'
+              onChange={handleChange}
+              value={formData.about}
+            />
+          </div>
+          <div className="profileModalBlock">
             <div 
               className="profileModalImg profileModalImg--photo"
               onClick={() => profileImageRef.current.click()}
@@ -138,7 +181,12 @@ const ProfileModal = ({ isOpen, setIsOpen, data }) => {
               <span className="profileModalLabel">Cover Image</span>
             </div>
           </div>
-          <button className="btn btn--profileModalForm">Update</button>
+          <button 
+            className="btn btn--profileModalForm"
+            onClick={handleSubmit}
+          >
+            Update
+          </button>
         </form>
         <input 
           className='hidden' 
@@ -146,7 +194,7 @@ const ProfileModal = ({ isOpen, setIsOpen, data }) => {
           accept={imagesType.join(',')}
           name='profilePicture' 
           ref={profileImageRef}
-          onChange={handleProfileImageChange}
+          onChange={handleImageChange}
         />
         <input 
           className='hidden' 
@@ -154,7 +202,7 @@ const ProfileModal = ({ isOpen, setIsOpen, data }) => {
           accept={imagesType.join(',')}
           name='coverPicture' 
           ref={coverImageRef}
-          onChange={handleCoverImageChange}
+          onChange={handleImageChange}
         />
       </Modal>
     </>

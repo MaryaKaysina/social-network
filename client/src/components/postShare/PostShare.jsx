@@ -52,7 +52,6 @@ const PostShare = () => {
   };
 
   const handleSubmit = (e) => {
-    console.log('handleSubmit');
     e.preventDefault();
     if(!descRef.current.value) return setFormError(true);
 

@@ -32,6 +32,7 @@ class UserModel extends Model('users') {
     this.profilePicture = profilePicture,
     this.coverPicture = coverPicture,
     this.about = about,
+    this.country = country,
     this.livesIn = livesIn,
     this.worksAt = worksAt,
     this.relationship = relationship,

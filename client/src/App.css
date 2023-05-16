@@ -56,7 +56,6 @@
   background: var(--buttonBg);
   color: white;
   transition: 
-    border-color .2s ease-in-out,
     background .2s ease-in-out,
     color .2s ease-in-out;
   cursor: pointer;
@@ -65,13 +64,22 @@
 .btn:hover {
   color: var(--orange);
   background: transparent;
-  border-color: var(--buttonBg);
 }
 
 .btn:disabled {
   background: #ccc;
   pointer-events: none;
   border-color: #999;
+}
+
+.btn--revert {
+  color: var(--orange);
+  background: transparent;
+}
+
+.btn--revert:hover {
+  color: white;
+  background: var(--buttonBg);
 }
 
 .hidden {
