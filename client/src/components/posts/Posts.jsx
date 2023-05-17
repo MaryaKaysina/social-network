@@ -12,7 +12,11 @@ const Posts = () => {
   const user = useSelector((state) => state.authReducer.authData.userData);
   const followLoading = useSelector((state) => state.authReducer.followLoading);
   const { posts, loading } = useSelector((state) => state.postReducer);
-  const [ postsList, setPostsList ] = React.useState(posts);
+  const [ postsList, setPostsList ] = React.useState([]);
+
+  React.useEffect(() => {
+    setPostsList(posts);
+  }, [params.id]);
 
   React.useEffect(() => {
     if (!followLoading) {
@@ -20,11 +24,10 @@ const Posts = () => {
     }
 
     if (params.id) {
-      const filterPost = postsList.filter((post) => post.userId === params.id);
+      const filterPost = posts.filter((post) => post.userId === params.id);
       setPostsList(filterPost);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [followLoading]);
+  }, [user, followLoading, params.id]);
 
   return (
     <div className='posts'>

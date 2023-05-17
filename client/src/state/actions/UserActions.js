@@ -37,6 +37,7 @@ export const unFollowUser = (id, data) => async(dispatch) => {
     await UserApi.unFollowUser(id, data);
     dispatch({ type: UNFOLLOW_USER, data: id });
   } catch (error) {
+    console.log(error);
     dispatch({ type: UNFOLLOW_FAIL, error : error.response.data || ERR_SERVER });
   }
 }

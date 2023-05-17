@@ -1,0 +1,93 @@
+.chatBoxContainer {
+  background: var(--cardColor);
+  border-radius: 1rem;
+  display: grid;
+  grid-template-rows: 14vh 60vh 13vh;
+}
+
+.chatBoxHeader {
+  padding: 1rem 1rem 0rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.hr--long {
+  width: 100%;
+}
+
+.chatBoxBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  overflow: scroll;
+}
+
+.message {
+  background: var(--buttonBg);
+  color: white;
+  padding: 0.7rem;
+  border-radius: 1rem 1rem 1rem 0;
+  max-width: 28rem;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.messageTime {
+  font-size: 0.7rem;
+  color: var(--textColor);
+  align-self: end;
+}
+
+.own {
+  align-self: flex-end;
+  border-radius: 1rem 1rem 0 1rem;
+  background: linear-gradient(98.63deg, #24e4f0 0%, #358ff9 100%);
+}
+
+.chatBoxSender {
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  height: 3.5rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 1rem;
+  align-self: end;
+}
+
+.chatBoxAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 33px;
+  border: 2px solid var(--orange);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 20px;
+  color: var(--orange);
+  cursor: pointer;
+}
+
+.react-input-emoji--container {
+  border-radius: 0.5rem!important;
+  background-color: rgb(236, 236, 236);
+}
+
+.sendBtn {
+  padding: 0.7rem 2rem;
+}
+
+.chatBoxEmpty {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-self: center;
+  color: var(--gray);
+  font-size: 14px;
+  font-style: italic;
+}

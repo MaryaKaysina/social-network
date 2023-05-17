@@ -27,7 +27,7 @@ const User = ({ person }) => {
           src={person.profilePicture 
             ? serverPublic + person.profilePicture 
             : serverPublic + 'defaultProfile.png'} 
-          alt="Аватар пользователя" 
+          alt="Users avatar" 
         />
         <div className="userInfo">
           <span className="userName">{person.firstname}</span>

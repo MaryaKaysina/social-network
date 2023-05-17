@@ -9,7 +9,9 @@ import {
   UPDATING_FAIL,
   FOLLOW_USER,
   UNFOLLOW_USER,
-  FOLLOW_LOAD
+  FOLLOW_LOAD,
+  FOLLOW_FAIL,
+  UNFOLLOW_FAIL
 } from '@core/state/actions/actionTypes';
 
 const initialState = {
@@ -97,6 +99,20 @@ const authReducer = (state = initialState, action) => {
             ]
           } 
         }
+      };
+    case FOLLOW_FAIL:
+      return { 
+        ...state, 
+        followLoading: false, 
+        error: true,
+        errMessage: action.error
+      };
+    case UNFOLLOW_FAIL:
+      return { 
+        ...state, 
+        followLoading: false, 
+        error: true,
+        errMessage: action.error
       };
     case LOG_OUT:
       localStorage.removeItem(LOCAL_KEY);

@@ -1,9 +1,13 @@
 import React from 'react';
 import { Navigate, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Home from "@core/pages/home/Home";
 import Profile from "@core/pages/profile/Profile";
 import Auth from "@core/pages/auth/Auth";
+import Chat from '@core/pages/chat/Chat';
+
+import { logOut } from '@core/state/actions/AuthActions';
 import NotificationCustom from '@components/notification/Notification';
 
 import "./App.css";
@@ -17,11 +21,19 @@ function App() {
   const error = useSelector((state) => state.authReducer.error);
   const errMessage = useSelector((state) => state.authReducer.errMessage);
 
+  const dispatch = useDispatch();
+
   React.useEffect(() => {
     setIsOpenError(error);
     const timerId = setTimeout(() => setIsOpenError(false), 3000);
     return () => clearTimeout(timerId);
   }, [error]);
+
+  React.useEffect(() => {
+    if (errMessage === 'Session expired') {
+      dispatch(logOut());
+    }
+  }, [errMessage]);
 
   React.useEffect(() => {
     if (user && isSignUp) {
@@ -35,7 +47,6 @@ function App() {
     <div className="App">
       <div className="blur blur--top"></div>
       <div className="blur blur--bottom"></div>
-        {/* <Profile /> */}
       <Routes>
         <Route 
           path="/" 
@@ -55,6 +66,10 @@ function App() {
         <Route 
           path="/profile/:id" 
           element={user ? <Profile />: <Navigate to="../auth" />} 
+        />
+        <Route 
+          path="/chat" 
+          element={user ? <Chat />: <Navigate to="../auth" />} 
         />
       </Routes>
       <NotificationCustom 

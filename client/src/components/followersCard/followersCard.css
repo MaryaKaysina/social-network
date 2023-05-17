@@ -6,3 +6,14 @@
   border-radius: .7rem;
   font-size: 13px;
 }
+
+.followersCard--modal {
+  margin-top: -50px;
+}
+
+.followersMore {
+  font-weight: bold;
+  color: orange;
+  align-self: center;
+  cursor: pointer;
+}
