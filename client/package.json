@@ -2,7 +2,7 @@
   "name": "starter",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://social-network-server-vxby.onrender.com:5000",
+  "proxy": "https://social-network-server-vxby.onrender.com",
   "dependencies": {
     "@iconscout/react-unicons": "^1.1.6",
     "@mantine/core": "^4.2.1",
