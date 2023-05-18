@@ -33,6 +33,7 @@ function App() {
     if (errMessage === 'Session expired') {
       dispatch(logOut());
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errMessage]);
 
   React.useEffect(() => {
@@ -41,6 +42,7 @@ function App() {
       const timerId = setTimeout(() => setIsOpenSuccess(false), 3000);
       return () => clearTimeout(timerId);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

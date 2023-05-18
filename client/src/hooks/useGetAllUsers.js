@@ -22,6 +22,7 @@ export const useGetAllUsers = (user, location) => {
       .catch(console.error);
 
     return () => isSubscribed = false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user._id]);
 
   return persons;

@@ -21,6 +21,7 @@ const ChatBox = ({ chat, currentUserId, setSendMessage, receivedMessage }) => {
     if (receivedMessage && receivedMessage.chatId === chat._id) {
       setMessages([...messages, receivedMessage]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [receivedMessage])
 
   React.useEffect(() => {

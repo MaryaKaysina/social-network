@@ -16,6 +16,7 @@ const Posts = () => {
 
   React.useEffect(() => {
     setPostsList(posts);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
   React.useEffect(() => {
@@ -27,6 +28,7 @@ const Posts = () => {
       const filterPost = posts.filter((post) => post.userId === params.id);
       setPostsList(filterPost);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, followLoading, params.id]);
 
   return (
