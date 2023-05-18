@@ -4,34 +4,14 @@ import { useSelector } from 'react-redux';
 import User from '@components/user/User';
 import FollowersModal from '@components/followersModal/FollowersModal';
 
-import { getAllUsers } from '@core/api/UserRequest';
+import { useGetAllUsers } from '@core/hooks/useGetAllUsers';
 
 import "./followersCard.css";
 
 const FollowersCard = ({ location }) => {
   const [modalOpened, setModalOpened] = React.useState(false);
-  const [persons, setPersons] = React.useState([]);
   const user = useSelector((state) => state.authReducer.authData.userData);
-
-  React.useEffect(() => {
-    let isSubscribed = true;
-
-    const fetchPerson = async () => {
-      try {
-        const { data } = await getAllUsers();
-        let users = data.filter((person) => person._id !== user._id);
-        if (!location) users = users.slice(0, 4);
-        if (isSubscribed) setPersons(users);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchPerson()
-      .catch(console.error);
-
-    return () => isSubscribed = false;
-  }, [user._id]);
+  const persons = useGetAllUsers(user, location);
 
   return (
     <div className={!location ? 'followersCard' : 'followersCard followersCard--modal'}>

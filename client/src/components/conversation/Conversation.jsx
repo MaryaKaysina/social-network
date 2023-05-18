@@ -1,36 +1,17 @@
 import React from 'react';
 
-import { getUser } from '@core/api/UserRequest';
+import { useGetUserData } from '@core/hooks/useGetUserData';
 
 import UserChat from '@components/userChat/UserChat';
 
 import "./conversation.css";
 
-const Conversation = ({ data, currentUserId }) => {
-  const [userData, setUserData] = React.useState(null);
-
-  React.useEffect(() => {
-    let isSubscribed = true;
-    const userId = data.members.find((id) => id !== currentUserId);
-
-    const getUserData = async () => {
-      try {
-        const { data } = await getUser(userId);
-        if (isSubscribed) setUserData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getUserData()
-      .catch(console.error);
-
-    return () => isSubscribed = false;
-  }, []);
+const Conversation = ({ data, currentUserId, online }) => {
+  const userData = useGetUserData(data, currentUserId);
 
   return (
     <>
-      <UserChat userData={userData} />
+      <UserChat userData={userData} online={online} />
       <hr className='hr hr--small' />
     </>
   );

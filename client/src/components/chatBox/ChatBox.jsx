@@ -2,59 +2,59 @@ import React from 'react';
 import { format } from 'timeago.js';
 import InputEmoji from "react-input-emoji";
 
-import { getUser } from '@core/api/UserRequest';
-import { getMessages } from '@core/api/MessageRequest';
+import { useGetUserData } from '@core/hooks/useGetUserData';
+import { useGetMessages } from '@core/hooks/useGetMessages';
+
+import { addMessage } from '@core/api/MessageRequest';
 
 import UserChat from '@components/userChat/UserChat';
 
 import "./chatBox.css";
 
 const ChatBox = ({ chat, currentUserId, setSendMessage, receivedMessage }) => {
-  const [userData, setUserData] = React.useState(null);
-  const [messages, setMessages] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState('');
+  const userData = useGetUserData(chat, currentUserId);
+  const [messages, setMessages] = useGetMessages(chat, currentUserId);
+  const scroll = React.useRef();
 
   React.useEffect(() => {
-    let isSubscribed = true;
-    const userId = chat?.members?.find((id) => id !== currentUserId);
-
-    const getUserData = async () => {
-      if (!chat) return;
-      try {
-        const { data } = await getUser(userId);
-        if (isSubscribed) setUserData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getUserData()
-      .catch(console.error);
-
-    return () => isSubscribed = false;
-  }, [chat, currentUserId]);
+    if (receivedMessage && receivedMessage.chatId === chat._id) {
+      setMessages([...messages, receivedMessage]);
+    }
+  }, [receivedMessage])
 
   React.useEffect(() => {
-    let isSubscribed = true;
-
-    const fetchMessages = async () => {
-      if (!chat) return;
-      try {
-        const { data } = await getMessages(chat._id);
-        if (isSubscribed) setMessages(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchMessages()
-      .catch(console.error);
-
-    return () => isSubscribed = false;
-  }, [chat, currentUserId]);
+    scroll.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
 
   const handleChange = (newMessage) => {
     setNewMessage(newMessage);
+  }
+
+  const handleSend = async () => {
+    if (newMessage.length === 0) return;
+
+    const message = {
+      senderId: currentUserId,
+      text: newMessage,
+      chatId: chat._id
+    }
+
+    try {
+      const { data } = await addMessage(message);
+      setNewMessage('');
+      setMessages([...messages, data]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    const receiverId = chat.members.find((id) => id !== currentUserId);
+    setSendMessage({ ...message, receiverId })
+  }
+
+  const handleSendBtn = async (e) => {
+    e.preventDefault();
+    handleSend();
   }
 
   return (
@@ -69,6 +69,7 @@ const ChatBox = ({ chat, currentUserId, setSendMessage, receivedMessage }) => {
             <div className="chatBoxBody">
               {messages.map((message) => (
                 <div 
+                  ref={scroll}
                   key={message._id}
                   className={message.senderId === currentUserId
                     ? 'message own'
@@ -85,9 +86,9 @@ const ChatBox = ({ chat, currentUserId, setSendMessage, receivedMessage }) => {
                 className="chatBoxInput"
                 value={newMessage}
                 onChange={handleChange}
-                cleanOnEnter
+                onEnter={handleSend}
               />
-              <button className="btn sendBtn">Send</button>
+              <button className="btn sendBtn" onClick={handleSendBtn}>Send</button>
             </div>
           </>
         )}

@@ -1,39 +1,47 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { io } from "socket.io-client";
 
 import LogoSearch from '@components/logoSearch/LogoSearch';
 import Navigation from '@components/navigation/Navigation';
 import Conversation from '@components/conversation/Conversation';
 import ChatBox from '@components/chatBox/ChatBox';
 
-import { userChats } from '@core/api/ChatRequest';
+import { useGetChats } from '@core/hooks/useGetChats';
 
 import "./chat.css";
+import { SOCKET_URL } from '@core/const';
 
 const Chat = () => {
-  const [chats, setChats] = React.useState([]);
   const [currentChat, setCurrentChat] = React.useState(null);
+  const [onlineUsers, setOnlineUsers] = React.useState([]);
+  const [sendMessage, setSendMessage] = React.useState(null);
+  const [receivedMessage, setReceivedMessage] = React.useState(null);
   const user = useSelector((state) => state.authReducer.authData.userData);
+  const chats = useGetChats(user);
+  const socket = React.useRef();
 
   React.useEffect(() => {
-    let isSubscribed = true;
+    socket.current = io(SOCKET_URL);
+    socket.current.emit('new-user-add', user._id);
+    socket.current.on('get-users', (users) => setOnlineUsers(users));
+  }, [user]);
 
-    const getChats = async () => {
-      try {
-        const { data } = await userChats(user._id);
-        if (isSubscribed) {
-          setChats(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  React.useEffect(() => {
+    if (!sendMessage) return;
+    socket.current.emit('send-message', sendMessage);
+  }, [sendMessage]);
 
-    getChats()
-      .catch(console.error);
+  React.useEffect(() => {
+    socket.current.on('receive-message', (data) => setReceivedMessage(data));
+  }, []);
 
-    return () => isSubscribed = false;
-  }, [user._id]);
+  const checkOnlineStatus = (chat) => {
+    const chatMember = chat.members.find((member) => member !== user._id);
+    const online = onlineUsers.find((user) => user.userId === chatMember);
+    console.log(online);
+    return online ? true : false;
+  }
 
   return (
     <div className="chat">
@@ -47,7 +55,7 @@ const Chat = () => {
                 <Conversation
                   data={chat}
                   currentUserId={user._id}
-                  // online={checkOnlineStatus(chat)}
+                  online={checkOnlineStatus(chat)}
                 />
               </div>
             ))}
@@ -61,8 +69,8 @@ const Chat = () => {
         <ChatBox
           chat={currentChat}
           currentUserId={user._id}
-          // setSendMessage={setSendMessage}
-          // receivedMessage={receivedMessage}
+          setSendMessage={setSendMessage}
+          receivedMessage={receivedMessage}
         />
       </div>
     </div>

@@ -2,12 +2,12 @@ import React from 'react';
 
 import './userChat.css';
 
-const UserChat = ({ userData, isClick = true }) => {
+const UserChat = ({ userData, online, isClick = true }) => {
   const serverPublic = process.env.REACT_APP_PUBLIC_FOLDER;
-
+  
   return (
     <div className={isClick ? 'userChat userChat--hover' : 'userChat'}>
-      <div className={isClick ? 'userChatOnlineDot' : ''}></div>
+      <div className={isClick && online ? 'userChatOnlineDot' : ''}></div>
       <img 
         className='userChatImg' 
         src={userData?.profilePicture 
@@ -22,8 +22,11 @@ const UserChat = ({ userData, isClick = true }) => {
         <span className='userChatName'>
           {userData?.firstname} {userData?.lastname}
         </span>
-        {isClick && (
+        {isClick && online && (
           <span className='userChatStatus'>Online</span>
+        )}
+        {isClick && !online && (
+          <span className='userChatStatus'>Offline</span>
         )}
       </div>
     </div>
