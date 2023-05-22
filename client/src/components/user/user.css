@@ -7,6 +7,8 @@
 .userContainer {
   display: flex;
   gap: 10px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .userImg {

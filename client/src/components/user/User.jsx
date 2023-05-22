@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { followUser, unFollowUser } from '../../state/actions/UserActions';
 
@@ -20,8 +21,8 @@ const User = ({ person }) => {
   }
 
   return (
-    <div key={person.id} className="user">
-      <div className="userContainer">
+    <div key={person._id} className="user">
+      <Link className="userContainer" to={`/profile/${person._id}`}>
         <img 
           className="userImg" 
           src={person.profilePicture 
@@ -33,7 +34,7 @@ const User = ({ person }) => {
           <span className="userName">{person.firstname}</span>
           <span className="userUsername">@{person.username}</span>
         </div>
-      </div>
+      </Link>
       <button 
         className={isFollowing 
           ? "btn userBtn btn--revert" 

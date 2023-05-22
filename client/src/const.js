@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://social-network-server-vxby.onrender.com';
+export const BASE_URL = 'http://localhost:5000';
 export const SOCKET_URL = 'http://localhost:8800';
 export const LOCAL_KEY = 'social_network_profile';
 export const LOCAL_BASE_KEY = 'store';

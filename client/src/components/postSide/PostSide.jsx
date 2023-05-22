@@ -4,10 +4,10 @@ import Posts from '@components/posts/Posts';
 
 import "./postSide.css";
 
-const PostSide = () => {
+const PostSide = ({ isProfileUser = true }) => {
   return (
     <div className='postSide'>
-      <PostShare />
+      {isProfileUser && <PostShare />}
       <Posts />
     </div>
   )
